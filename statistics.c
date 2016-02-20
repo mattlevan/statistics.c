@@ -11,9 +11,18 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-void calc_average(int a[]);
-void calc_min(int a[]);
-void calc_max(int a[]);
+void calc_average(int a[]) {
+    printf("1");
+    printf("Change to my file");
+}
+
+void calc_min(int a[]) {
+    printf("2");
+}
+
+void calc_max(int a[]) {
+    printf("3");
+}
 
 int main(int argc, char* argv[]) {
     // Print a help message if not enough arguments are entered.
@@ -32,13 +41,20 @@ by a space>");
 
         // For each integer in the list of args, insert them into a[]. 
         // Start iterating at 1 to ignore the "./statistics.o" arg.
-        for (int i = 1; i < argc; i++) {
+        int i;
+       
+        printf("\n");
+        printf("Using this list of numbers: ");
+        
+        for (i = 1; i < argc; i++) {
             // Start at i-1 to ensure a[0] is used.
             // Use atoi() to convert argv[i] to an integer.
             a[i-1] = atoi(argv[i]); 
-            printf("Using this list of numbers:\n");
+            // Print the list of numbers to use.
             printf("%d ", a[i-1]);
         }
+
+        printf("\n");
 
         // Fork three children, one for each caculation.
         int children = 3; // An int limit for a for loop.
@@ -68,14 +84,3 @@ by a space>");
     return EXIT_SUCCESS;
 }
 
-void calc_average(int* a[]) {
-
-}
-
-void calc_min(int* a[]) {
-
-}
-
-void calc_max(int* a[]) {
-
-}

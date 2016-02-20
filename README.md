@@ -2,6 +2,8 @@
 A simple C program that calculates stastical values from a list of
 numbers using multiple processes.
 
+TEST.
+
 Authors:
   * Matt Levan
   * Nolan Thompson
