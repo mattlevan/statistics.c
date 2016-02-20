@@ -8,13 +8,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
+#include <sys/types.h>
 #include <unistd.h>
 
-void calc_average(int* a[]);
-void calc_min(int* a[]);
-void calc_max(int* a[]);
+void calc_average(int a[]);
+void calc_min(int a[]);
+void calc_max(int a[]);
 
 int main(int argc, char* argv[]) {
     // Print a help message if not enough arguments are entered.
@@ -28,9 +27,6 @@ by a space>");
     }
     // Else, fill an int array with the numbers given in the CLI args.
     else {
-        // Declare pid_t var.
-        pid_t pid;
-
         // Declare an int array of size argc-1.
         int a[argc-1];
 
@@ -44,29 +40,42 @@ by a space>");
             printf("%d ", a[i-1]);
         }
 
-        // Fork process three times, one for each calculation.
-        pid = fork();
-        pid = fork();
-        pid = fork();
+        // Fork three children, one for each caculation.
+        int children = 3; // An int limit for a for loop.
+        pid_t pid[children]; // An array containing pids of children.
 
-        // Error occured.
-        if (pid < 0) {
-            printf("Fork failed.\n");
-            return 1;
+        for (int i = 0; i < children; i++) {
+            if ((pid[i] = fork()) < 0) {
+                perror("Fork failed.\n");
+                return 1;
+            }
+            if (pid[i] == 0) {
+                switch(i) {
+                    case 0:
+                        calc_average(a);
+                        break;
+                    case 1:
+                        calc_min(a);
+                        break;
+                    case 2:
+                        calc_max(a);
+                        break;
+                }
+            }
         }
-        else if (pid == 0) {
-            calc_average(a[0]);
-        }
-        else if (pid == 1) {
-
-        }
-        else if (pid == 2) {
-
-        }
-        calc_average(a[0]);
-        calc_min(a[0]);
-        calc_max(a[0]);
-    }
+    }                        
 
     return EXIT_SUCCESS;
+}
+
+void calc_average(int* a[]) {
+
+}
+
+void calc_min(int* a[]) {
+
+}
+
+void calc_max(int* a[]) {
+
 }
