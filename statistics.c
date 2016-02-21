@@ -3,7 +3,7 @@
  *
  * A simple C program that calculates statistical values from a list of
  * numbers using multiple processes.
- * this is a test
+ * this is a test this is another test
  */
 
 #include <stdio.h>
