@@ -3,17 +3,17 @@
  *
  * A simple C program that calculates statistical values from a list of
  * numbers using multiple processes.
- * this is a test this is another test
+ *
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 void calc_average(int a[]) {
     printf("1");
-    printf("Change to my file");
 }
 
 void calc_min(int a[]) {
@@ -41,12 +41,11 @@ by a space>");
 
         // For each integer in the list of args, insert them into a[]. 
         // Start iterating at 1 to ignore the "./statistics.o" arg.
-        int i;
        
         printf("\n");
         printf("Using this list of numbers: ");
         
-        for (i = 1; i < argc; i++) {
+        for (int i = 1; i < argc; i++) {
             // Start at i-1 to ensure a[0] is used.
             // Use atoi() to convert argv[i] to an integer.
             a[i-1] = atoi(argv[i]); 
@@ -58,14 +57,15 @@ by a space>");
 
         // Fork three children, one for each caculation.
         int children = 3; // An int limit for a for loop.
-        pid_t pid[children]; // An array containing pids of children.
+        // pid_t pid[children]; // An array containing pids of children.
+        pid_t pid;
 
         for (int i = 0; i < children; i++) {
-            if ((pid[i] = fork()) < 0) {
+            if ((pid = fork()) < 0) {
                 perror("Fork failed.\n");
                 return 1;
             }
-            if (pid[i] == 0) {
+            if (pid == 0) {
                 switch(i) {
                     case 0:
                         calc_average(a);
@@ -77,7 +77,10 @@ by a space>");
                         calc_max(a);
                         break;
                 }
+                break;
             }
+
+            wait(NULL);
         }
     }                        
 
