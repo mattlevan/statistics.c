@@ -16,11 +16,11 @@ void calc_average(int a[]) {
     printf("1");
 }
 
-void calc_min(int a[]) {
+void calc_max(int a[]) {
     printf("2");
 }
 
-void calc_max(int a[]) {
+void calc_min(int a[]) {
     printf("3");
 }
 
@@ -71,12 +71,13 @@ by a space>");
                         calc_average(a);
                         break;
                     case 1:
-                        calc_min(a);
-                        break;
-                    case 2:
                         calc_max(a);
                         break;
+                    case 2:
+                        calc_min(a);
+                        break;
                 }
+                
                 break;
             }
 
