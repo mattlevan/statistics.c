@@ -12,16 +12,41 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-void calc_average(int a[]) {
-    printf("1");
+void calc_average(int a[], int a_size) {
+    int a_sum = 0;
+    int a_average;
+    // add up array contents
+    for(int i = 0; i < a_size; i++){
+	a_sum = a[i] + a_sum; 
+    }
+    // obtain average of array contents
+    a_average = a_sum/a_size;
+    printf("(child: %d) The average value is %d\n", getpid(), a_average);
 }
 
-void calc_max(int a[]) {
-    printf("2");
+void calc_max(int a[], int a_size) {
+    int a_max = a[0]; // set a_max equal to the first array value
+    // loop through remaining array members
+    for(int i = 1; i < a_size; i++){
+	// check current array member w/max. Set a_max to highest value
+	if(a[i] > a_max){
+	    a_max = a[i];
+	}
+	
+    }
+    printf("(child: %d) The maximum value is %d\n", getpid(), a_max);
 }
 
-void calc_min(int a[]) {
-    printf("3");
+void calc_min(int a[], int a_size) {
+    int a_min = a[0]; // set a_min equal to the first array value
+    // loop through remaining array members
+    for(int i = 1; i < a_size; i++){
+	// check current array member w/a_min. Set a_min to lowest value
+	if(a[i] < a_min){
+	    a_min = a[i];
+	}
+    }
+    printf("(child: %d) The minimum value is %d\n", getpid(), a_min);
 }
 
 int main(int argc, char* argv[]) {
@@ -43,7 +68,7 @@ by a space>");
         // Start iterating at 1 to ignore the "./statistics.o" arg.
        
         printf("\n");
-        printf("Using this list of numbers: ");
+        printf("(Parent: %d) Using this list of numbers: ", getpid());
         
         for (int i = 1; i < argc; i++) {
             // Start at i-1 to ensure a[0] is used.
@@ -51,10 +76,9 @@ by a space>");
             a[i-1] = atoi(argv[i]); 
             // Print the list of numbers to use.
             printf("%d ", a[i-1]);
-        }
+       }
 
         printf("\n");
-
         // Fork three children, one for each caculation.
         int children = 3; // An int limit for a for loop.
         // pid_t pid[children]; // An array containing pids of children.
@@ -68,13 +92,13 @@ by a space>");
             if (pid == 0) {
                 switch(i) {
                     case 0:
-                        calc_average(a);
-                        break;
+                        calc_average(a, (argc-1));
+			break;
                     case 1:
-                        calc_max(a);
+                        calc_min(a, (argc-1));
                         break;
                     case 2:
-                        calc_min(a);
+                        calc_max(a, (argc-1));
                         break;
                 }
                 
