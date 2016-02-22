@@ -15,36 +15,35 @@
 void calc_average(int a[], int a_size) {
     int a_sum = 0;
     int a_average;
-    // add up array contents
-    for(int i = 0; i < a_size; i++){
-	a_sum = a[i] + a_sum; 
+    // Add all array contents to a_sum.
+    for (int i = 0; i < a_size; i++) {
+	    a_sum = a[i] + a_sum; 
     }
-    // obtain average of array contents
+    // Obtain average of array contents.
     a_average = a_sum/a_size;
     printf("(child: %d) The average value is %d\n", getpid(), a_average);
 }
 
 void calc_max(int a[], int a_size) {
-    int a_max = a[0]; // set a_max equal to the first array value
-    // loop through remaining array members
-    for(int i = 1; i < a_size; i++){
-	// check current array member w/max. Set a_max to highest value
-	if(a[i] > a_max){
+    int a_max = a[0]; // Set a_max equal to the first array value.
+    // Loop through remaining array members.
+    for (int i = 1; i < a_size; i++) {
+	    // Check current array member w/ max. Set a_max to highest value.
+	    if (a[i] > a_max) {
 	    a_max = a[i];
-	}
-	
+	    }
     }
     printf("(child: %d) The maximum value is %d\n", getpid(), a_max);
 }
 
 void calc_min(int a[], int a_size) {
-    int a_min = a[0]; // set a_min equal to the first array value
-    // loop through remaining array members
-    for(int i = 1; i < a_size; i++){
-	// check current array member w/a_min. Set a_min to lowest value
-	if(a[i] < a_min){
+    int a_min = a[0]; // Set a_min equal to the first array value.
+    // Loop through remaining array members.
+    for (int i = 1; i < a_size; i++) {
+	    // Check current array member w/a_min. Set a_min to lowest value.
+	    if (a[i] < a_min) {
 	    a_min = a[i];
-	}
+	    }
     }
     printf("(child: %d) The minimum value is %d\n", getpid(), a_min);
 }
