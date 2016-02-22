@@ -30,7 +30,7 @@ void calc_max(int a[], int a_size) {
     for (int i = 1; i < a_size; i++) {
 	    // Check current array member w/ max. Set a_max to highest value.
 	    if (a[i] > a_max) {
-	    a_max = a[i];
+    	    a_max = a[i];
 	    }
     }
     printf("(child: %d) The maximum value is %d\n", getpid(), a_max);
@@ -42,7 +42,7 @@ void calc_min(int a[], int a_size) {
     for (int i = 1; i < a_size; i++) {
 	    // Check current array member w/a_min. Set a_min to lowest value.
 	    if (a[i] < a_min) {
-	    a_min = a[i];
+	        a_min = a[i];
 	    }
     }
     printf("(child: %d) The minimum value is %d\n", getpid(), a_min);
