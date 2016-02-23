@@ -103,8 +103,6 @@ by a space>");
                 
                 break;
             }
-
-            wait(NULL);
         }
     }                        
 
