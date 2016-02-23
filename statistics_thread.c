@@ -24,7 +24,7 @@ void calc_average(int a[], int a_size) {
     }
     // Obtain average of array contents.
     a_average = a_sum/a_size;
-    printf("(child: %d) The average value is %d\n", getpid(), a_average);
+    printf("(Child: %d) The average value is %d\n", getpid(), a_average);
 }
 
 void calc_max(int a[], int a_size) {
@@ -36,7 +36,7 @@ void calc_max(int a[], int a_size) {
     	    a_max = a[i];
 	    }
     }
-    printf("(child: %d) The maximum value is %d\n", getpid(), a_max);
+    printf("(Child: %d) The maximum value is %d\n", getpid(), a_max);
 }
 
 void calc_min(int a[], int a_size) {
@@ -48,7 +48,7 @@ void calc_min(int a[], int a_size) {
 	        a_min = a[i];
 	    }
     }
-    printf("(child: %d) The minimum value is %d\n", getpid(), a_min);
+    printf("(Child: %d) The minimum value is %d\n", getpid(), a_min);
 }
 
 int main(int argc, char* argv[]) {
@@ -81,6 +81,14 @@ by a space>");
        }
 
         printf("\n");
+
+        // Thread variables.
+        pthread_t tid1, tid2, tid3; // Three thread identifiers.
+        pthread_attr_t attr; // Thread attributes.
+
+        // Initialize each pthread with default attributes.
+        pthread_attr_init(&attr);
+
         // Fork three children, one for each caculation.
         int children = 3; // An int limit for a for loop.
         // pid_t pid[children]; // An array containing pids of children.
