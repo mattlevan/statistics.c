@@ -8,47 +8,57 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
 #include <pthread.h>
 
-int average, min, max;
+int size; // Size of integer array a.
+int a[100]; // Pointer to integer array.
 
-void calc_average(int a[], int a_size) {
-    int a_sum = 0;
-    int a_average;
-    // Add all array contents to a_sum.
-    for (int i = 0; i < a_size; i++) {
-	    a_sum = a[i] + a_sum; 
+void* calc_average() {
+    int sum = 0;
+    double average;
+
+    // Add all array contents to sum.
+    for (int i = 0; i < size; i++) {
+	    sum = a[i] + sum; 
     }
     // Obtain average of array contents.
-    a_average = a_sum/a_size;
-    printf("(Child: %d) The average value is %d\n", getpid(), a_average);
+    average = (double) sum/size;
+    printf("The average value is %0.3f\n", average);
+
+    // Finish the thread.
+    pthread_exit(0);
 }
 
-void calc_max(int a[], int a_size) {
-    int a_max = a[0]; // Set a_max equal to the first array value.
+void* calc_max() {
+    int max = a[0]; // Set max equal to the first array value.
+
     // Loop through remaining array members.
-    for (int i = 1; i < a_size; i++) {
-	    // Check current array member w/ max. Set a_max to highest value.
-	    if (a[i] > a_max) {
-    	    a_max = a[i];
+    for (int i = 1; i < size; i++) {
+	    // Check current array member w/ max. Set max to highest value.
+	    if (a[i] > max) {
+    	    max = a[i];
 	    }
     }
-    printf("(Child: %d) The maximum value is %d\n", getpid(), a_max);
+    printf("(The maximum value is %d\n", max);
+    
+    // Finish the thread.
+    pthread_exit(0);
 }
 
-void calc_min(int a[], int a_size) {
-    int a_min = a[0]; // Set a_min equal to the first array value.
+void* calc_min() {
+    int min = a[0]; // Set a_min equal to the first array value.
+
     // Loop through remaining array members.
-    for (int i = 1; i < a_size; i++) {
-	    // Check current array member w/a_min. Set a_min to lowest value.
-	    if (a[i] < a_min) {
-	        a_min = a[i];
+    for (int i = 1; i < size; i++) {
+	    // Check current array member w/min. Set min to lowest value.
+	    if (a[i] < min) {
+	        min = a[i];
 	    }
     }
-    printf("(Child: %d) The minimum value is %d\n", getpid(), a_min);
+    printf("The minimum value is %d\n", min);
+
+    // Finish the thread.
+    pthread_exit(0);
 }
 
 int main(int argc, char* argv[]) {
@@ -60,17 +70,18 @@ int main(int argc, char* argv[]) {
         printf("Usage: ./statistics.o <list of integers, each separated \ 
 by a space>");
         printf("\n");
+
+        exit(1);
     }
     // Else, fill an int array with the numbers given in the CLI args.
     else {
-        // Declare an int array of size argc-1.
-        int a[argc-1];
+        size = argc - 1;
 
         // For each integer in the list of args, insert them into a[]. 
         // Start iterating at 1 to ignore the "./statistics.o" arg.
        
         printf("\n");
-        printf("(Parent: %d) Using this list of numbers: ", getpid());
+        printf("Using this list of numbers: ");
         
         for (int i = 1; i < argc; i++) {
             // Start at i-1 to ensure a[0] is used.
@@ -78,44 +89,38 @@ by a space>");
             a[i-1] = atoi(argv[i]); 
             // Print the list of numbers to use.
             printf("%d ", a[i-1]);
-       }
+        }
 
-        printf("\n");
+        printf("\n"); // Print a new line for clarity.
 
-        // Thread variables.
-        pthread_t tid1, tid2, tid3; // Three thread identifiers.
-        pthread_attr_t attr; // Thread attributes.
+        // Number of threads to create.
+        int threads = 3;
 
-        // Initialize each pthread with default attributes.
-        pthread_attr_init(&attr);
+        for (int i = 0; i < threads; i++) {
+            // Thread variables.
+            pthread_t tid; // Thread identifier.
+            pthread_attr_t attr; // Thread attributes.
 
-        // Fork three children, one for each caculation.
-        int children = 3; // An int limit for a for loop.
-        // pid_t pid[children]; // An array containing pids of children.
-        pid_t pid;
+            // Initialize each pthread with default attributes.
+            pthread_attr_init(&attr);
+           
+            // Get the default attributes for the thread.
+            pthread_attr_init(&attr);
 
-        for (int i = 0; i < children; i++) {
-            if ((pid = fork()) < 0) {
-                perror("Fork failed.\n");
-                return 1;
+            switch(i) {
+                case 0:
+                    pthread_create(&tid, &attr, calc_average, NULL);
+                    pthread_join(tid, NULL);
+			        break;
+                case 1:
+                    pthread_create(&tid, &attr, calc_max, NULL);
+                    pthread_join(tid, NULL);
+                    break;
+                case 2:
+                    pthread_create(&tid, &attr, calc_min, NULL);
+                    pthread_join(tid, NULL);
+                    break;
             }
-            if (pid == 0) {
-                switch(i) {
-                    case 0:
-                        calc_average(a, (argc-1));
-			break;
-                    case 1:
-                        calc_min(a, (argc-1));
-                        break;
-                    case 2:
-                        calc_max(a, (argc-1));
-                        break;
-                }
-                
-                break;
-            }
-
-            wait(NULL);
         }
     }                        
 
