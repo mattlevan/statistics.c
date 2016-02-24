@@ -10,56 +10,15 @@
 #include <stdlib.h>
 #include <pthread.h>
 
+#define MAXSIZE 100
+
+void* calc_average();
+void* calc_max();
+void* calc_min();
+
 int size; // Size of integer array a.
-int a[100]; // Pointer to integer array.
+int a[MAXSIZE]; // Pointer to integer array.
 
-void* calc_average() {
-    int sum = 0;
-    double average;
-
-    // Add all array contents to sum.
-    for (int i = 0; i < size; i++) {
-	    sum = a[i] + sum; 
-    }
-    // Obtain average of array contents.
-    average = (double) sum/size;
-    printf("The average value is %0.3f\n", average);
-
-    // Finish the thread.
-    pthread_exit(0);
-}
-
-void* calc_max() {
-    int max = a[0]; // Set max equal to the first array value.
-
-    // Loop through remaining array members.
-    for (int i = 1; i < size; i++) {
-	    // Check current array member w/ max. Set max to highest value.
-	    if (a[i] > max) {
-    	    max = a[i];
-	    }
-    }
-    printf("(The maximum value is %d\n", max);
-    
-    // Finish the thread.
-    pthread_exit(0);
-}
-
-void* calc_min() {
-    int min = a[0]; // Set a_min equal to the first array value.
-
-    // Loop through remaining array members.
-    for (int i = 1; i < size; i++) {
-	    // Check current array member w/min. Set min to lowest value.
-	    if (a[i] < min) {
-	        min = a[i];
-	    }
-    }
-    printf("The minimum value is %d\n", min);
-
-    // Finish the thread.
-    pthread_exit(0);
-}
 
 int main(int argc, char* argv[]) {
     // Print a help message if not enough arguments are entered.
@@ -73,6 +32,13 @@ by a space>");
 
         exit(1);
     }
+    else if (argc > MAXSIZE) {
+        printf("\n");
+        printf("Too many arguments! Try under %d.", MAXSIZE);
+        printf("\n");
+
+        exit(1);
+    }
     // Else, fill an int array with the numbers given in the CLI args.
     else {
         size = argc - 1;
@@ -82,6 +48,7 @@ by a space>");
        
         printf("\n");
         printf("Using this list of numbers: ");
+        printf("\n");
         
         for (int i = 1; i < argc; i++) {
             // Start at i-1 to ensure a[0] is used.
@@ -92,6 +59,7 @@ by a space>");
         }
 
         printf("\n"); // Print a new line for clarity.
+        printf("\n");
 
         // Number of threads to create.
         int threads = 3;
@@ -127,3 +95,50 @@ by a space>");
     return EXIT_SUCCESS;
 }
 
+void* calc_average() {
+    int sum = 0;
+    double average;
+
+    // Add all array contents to sum.
+    for (int i = 0; i < size; i++) {
+	    sum = a[i] + sum; 
+    }
+    // Obtain average of array contents.
+    average = (double) sum/size;
+    printf("The average value is %0.3f\n", average);
+
+    // Finish the thread.
+    pthread_exit(0);
+}
+
+void* calc_max() {
+    int max = a[0]; // Set max equal to the first array value.
+
+    // Loop through remaining array members.
+    for (int i = 1; i < size; i++) {
+	    // Check current array member w/ max. Set max to highest value.
+	    if (a[i] > max) {
+    	    max = a[i];
+	    }
+    }
+    printf("The maximum value is %d\n", max);
+    
+    // Finish the thread.
+    pthread_exit(0);
+}
+
+void* calc_min() {
+    int min = a[0]; // Set a_min equal to the first array value.
+
+    // Loop through remaining array members.
+    for (int i = 1; i < size; i++) {
+	    // Check current array member w/min. Set min to lowest value.
+	    if (a[i] < min) {
+	        min = a[i];
+	    }
+    }
+    printf("The minimum value is %d\n", min);
+
+    // Finish the thread.
+    pthread_exit(0);
+}
