@@ -1,5 +1,5 @@
 /*
- * statistics.c
+ * statistics_thread.c
  *
  * A simple C program that calculates statistical values from a list of
  * numbers using multiple threads.
