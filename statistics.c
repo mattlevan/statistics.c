@@ -14,14 +14,14 @@
 
 void calc_average(int a[], int a_size) {
     int a_sum = 0;
-    int a_average;
+    double a_average;
     // Add all array contents to a_sum.
     for (int i = 0; i < a_size; i++) {
 	    a_sum = a[i] + a_sum; 
     }
     // Obtain average of array contents.
-    a_average = a_sum/a_size;
-    printf("(child: %d) The average value is %d\n", getpid(), a_average);
+    a_average = (double)a_sum/(double)a_size;
+    printf("(child: %d) The average value is %0.2f\n", getpid(), a_average);
 }
 
 void calc_max(int a[], int a_size) {
