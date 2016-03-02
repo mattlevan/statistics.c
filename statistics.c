@@ -92,7 +92,7 @@ by a space>");
                 switch(i) {
                     case 0:
                         calc_average(a, (argc-1));
-			break;
+			            break;
                     case 1:
                         calc_min(a, (argc-1));
                         break;
@@ -100,7 +100,7 @@ by a space>");
                         calc_max(a, (argc-1));
                         break;
                 }
-                
+
                 break;
             }
         }
